@@ -48,6 +48,8 @@ document.querySelector('.enter-name').addEventListener('click', e => {
   document.querySelector('.main').classList.remove('d-none');
   document.querySelector('.buttons').classList.remove('d-none');
   document.querySelector('.enter').classList.add('d-none');
+
+  document.querySelector('.start').play();
 });
 
 //* Adjust Background according to difficulty level
@@ -59,8 +61,7 @@ const adjustBackground = function (color) {
   document.querySelector('.left').classList.add('bg-gradient');
 };
 
-//* Reset
-document.querySelector('.again').addEventListener('click', e => {
+const reset = function () {
   gameOn = false;
   right = 10;
   score = 0;
@@ -78,25 +79,30 @@ document.querySelector('.again').addEventListener('click', e => {
   gameScore(0);
   document.querySelector('.guess').value = '';
   adjustBackground('warning');
-  // document.querySelector('body').style.backgroundColor = '#fff';
+  document.querySelector('.start').play();
+};
+
+//* Reset
+document.querySelector('.again').addEventListener('click', e => {
+  reset();
 });
 
 //* Update Hall Of Fame
 const updateTable = function () {
-  document.querySelector('.hall-of-fame').innerHTML = '';
-  highScoreList;
-  const list = document.createElement('ol');
+  document.querySelector('tbody').innerHTML = '';
+  let place = 0;
   highScoreList
     .filter(entry => entry[1] < 30)
     .filter((_, i) => i < 10)
     .forEach(score => {
-      const newScore = document.createElement('li');
-      newScore.classList.add('lead', 'mt-2');
-      newScore.textContent = `${score[0]} : ${score[1]} - ${score[2]}`;
-      list.append(newScore);
+      const newScore = document.createElement('tr');
+      newScore.classList.add('text-secondary');
+      newScore.innerHTML = `<th scope="row">${++place}</th>
+      <td>${score[0]}</td>
+      <td>${score[1]}</td>
+      <td>${score[2]}</td>`;
+      document.querySelector('tbody').append(newScore);
     });
-
-  document.querySelector('.hall-of-fame').append(list);
 };
 updateTable();
 //* Add Difficulty Level
@@ -122,7 +128,28 @@ document.querySelector('.buttons').addEventListener('click', e => {
 });
 
 //* Win Ceramony
-const winCeramony = function () {};
+const winCeramony = function () {
+  document.querySelector('.main').classList.add('d-none');
+  document.querySelector('.buttons').classList.add('d-none');
+  document.querySelector('.video').classList.remove('d-none');
+  document.querySelector(`.win${Math.trunc(Math.random() * 3) + 1}`).play();
+  document.querySelector('.video').play();
+  document.querySelector(
+    '.heading'
+  ).innerHTML = `<i class="fa-solid fa-trophy text-warning"></i> WINNER <i class="fa-solid fa-trophy text-warning"></i>`;
+};
+
+const lostCeramony = function () {
+  document.querySelector('.giphy').play();
+  document.querySelector('.game-over').play();
+  gameBetween('Try Again');
+  document.querySelector('.main').classList.add('d-none');
+  document.querySelector('.buttons').classList.add('d-none');
+  document.querySelector('.giphy').classList.remove('d-none');
+  document.querySelector(
+    '.heading'
+  ).innerHTML = `<i class="fa-solid fa-explosion text-danger"></i></i> LOSER <i class="fa-solid fa-explosion text-danger"></i></i>`;
+};
 
 //* Score Calculate
 const calculateScore = function (score) {
@@ -139,12 +166,8 @@ const checkHighScore = function (score) {
   const time = ((isStop - isStart) / 1000).toFixed(2);
   const highScoreEntry = [playerName, score, time, '*'];
 
-  highScoreList.forEach((entry, i) => {
-    // if (score <= entry[1] && time <= entry[2] && !flag) {
-    //   highScoreList.splice(i, 0, highScoreEntry);
-    //   flag = true;
-    // }
-
+  highScoreList.forEach((entry, i, arr) => {
+    arr[i][3] = '*';
     if (score < entry[1] && !flag) {
       highScoreList.splice(i, 0, highScoreEntry);
       flag = true;
@@ -172,6 +195,7 @@ const calculateBetween = function (number) {
 
 //* Saving Session Storage
 const saveHighScore = function (list) {
+  sessionStorage.removeItem('Guess My Number High Score');
   sessionStorage.setItem('Guess My Number High Score', list);
 };
 
@@ -199,6 +223,9 @@ document.querySelector('.check').addEventListener('click', e => {
     } else if (guess !== myNumber) {
       right--;
       gameMessage(guess > myNumber ? '👎 A Bit Lower ' : '👍 A Bit Higher ');
+      guess > myNumber
+        ? document.querySelector('.tap-up').play()
+        : document.querySelector('.tap-down').play();
       gameRight(right);
       const tempScore = calculateScore(++counter);
       gameScore(tempScore);
@@ -210,5 +237,22 @@ document.querySelector('.check').addEventListener('click', e => {
     calculateScore(0);
     gameScore(0);
     gameMessage('You Have Lost!');
+    lostCeramony();
   }
 });
+
+document.querySelector('.videos').addEventListener('click', e => {
+  if (e.target.classList.contains('video')) {
+    document.querySelector('.main').classList.remove('d-none');
+    document.querySelector('.buttons').classList.remove('d-none');
+    document.querySelector('.video').classList.add('d-none');
+    document.querySelector('.heading').innerHTML = 'Guess My Number!';
+  } else if (e.target.classList.contains('giphy')) {
+    document.querySelector('.main').classList.remove('d-none');
+    document.querySelector('.buttons').classList.remove('d-none');
+    document.querySelector('.giphy').classList.add('d-none');
+    document.querySelector('.heading').innerHTML = 'Guess My Number!';
+  }
+});
+
+const gameEnd = function () {};

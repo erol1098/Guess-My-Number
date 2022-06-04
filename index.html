@@ -17,6 +17,13 @@
       integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
       p {
         font-size: 2rem;
@@ -29,16 +36,16 @@
   </head>
   <body>
     <h1
-      class="bg-light bg-gradient text-center text-primary display-3 mt-4 p-3 fw-bold"
+      class="heading bg-light bg-gradient text-center text-primary display-3 mt-4 p-3 fw-bold"
     >
       Guess My Number!
     </h1>
     <header class="container">
       <div class="row buttons d-none mt-3">
-        <div class="col-4 border border-3">
+        <div class="col-4">
           <button class="again btn btn-info">Again!</button>
         </div>
-        <div class="col-8 d-flex justify-content-end gap-3 border border-3">
+        <div class="col-8 d-flex justify-content-end gap-3">
           <button class="easy btn btn-success">Easy</button>
           <button class="normal btn btn-warning">Normal</button>
           <button class="hard btn btn-danger">Hard</button>
@@ -69,14 +76,30 @@
         <aside
           class="right col-4 d-flex flex-column justify-content-start align-items-start border border-2"
         >
-          <div class="">
-            <p class="label-right">💯 Right: <span class="right1">10</span></p>
-            <p class="label-score">💯 Score: <span class="score">0</span></p>
+          <div class="d-flex gap-5">
+            <p class="label-right">
+              <i class="fa-solid fa-dice text-danger"></i> Right:
+              <span class="right1">10</span>
+            </p>
+            <p class="label-score">
+              <i class="fa-solid fa-star text-warning"></i> Score:
+              <span class="score">0</span>
+            </p>
           </div>
-          <p class="label-highscore w-100 text-center">🥇 Highscore</p>
-          <div
-            class="hall-of-fame d-flex flex-column mt-3 border border-1"
-          ></div>
+          <p class="label-highscore w-100 text-center">
+            <i class="fa-solid fa-medal text-primary"></i> Highscore
+          </p>
+          <table class="table fw-bold">
+            <thead>
+              <tr class="bg-light text-info">
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Score</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </aside>
       </div>
 
@@ -91,11 +114,24 @@
           class="w-25"
           style="font-size: 32px"
         />
-        <button class="enter-name btn btn-outline-success text-capitalize w-25">
-          Enter
-        </button>
+        <button class="enter-name btn btn-outline-success w-25">Enter</button>
       </section>
     </main>
+    <div class="videos">
+      <audio src="./audio/win1.wav" class="win1"></audio>
+      <audio src="./audio/win2.wav" class="win2"></audio>
+      <audio src="./audio/win3.wav" class="win3"></audio>
+      <audio src="./audio/start.wav" class="start"></audio>
+      <audio src="./audio/game-over.wav" class="game-over"></audio>
+      <audio src="./audio/tap-up.wav" class="tap-up"></audio>
+      <audio src="./audio/tap-down.wav" class="tap-down"></audio>
+      <video class="video w-50 h-50 col-8 offset-3 d-none">
+        <source src="./audio/confetti.mp4" type=video/mp4>
+      </video>
+      <video class="giphy w-50 h-50 col-8 offset-3 d-none" muted>
+        <source src="./audio/game-over.mp4" type=video/mp4>
+      </video>
+    </div>
     <script src="script.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
