@@ -28,12 +28,13 @@
     </style>
   </head>
   <body>
-    <h1 class="bg-light bg-gradient text-center display-3 mt-4 p-3 fw-bold">
+    <h1
+      class="bg-light bg-gradient text-center text-primary display-3 mt-4 p-3 fw-bold"
+    >
       Guess My Number!
     </h1>
     <header class="container">
-      <!-- <p class="between">(Between 1 and 100)</p> -->
-      <div class="row buttons mt-3">
+      <div class="row buttons d-none mt-3">
         <div class="col-4 border border-3">
           <button class="again btn btn-info">Again!</button>
         </div>
@@ -43,10 +44,11 @@
           <button class="hard btn btn-danger">Hard</button>
         </div>
       </div>
-      <!-- <div class="number">?</div> -->
+      <div class="number">?</div>
     </header>
     <main class="container">
-      <div class="row mt-3">
+      <div class="main row mt-3 d-none">
+        <p class="between text-center display-4 fw-bold">(Between 1 and 100)</p>
         <section
           class="left col-8 p-3 d-flex flex-column justify-content-center align-items-center gap-3 bg-warning bg-gradient"
         >
@@ -65,17 +67,34 @@
         </section>
 
         <aside
-          class="right col-4 d-flex flex-column justify-content-center align-items-start gap-3 border border-2"
+          class="right col-4 d-flex flex-column justify-content-start align-items-start border border-2"
         >
-          <div class="h-25">
-            <p class="label-score">💯 Score: <span class="score">10</span></p>
-            <p class="label-highscore">
-              🥇 Highscore: <span class="highscore">0</span>
-            </p>
+          <div class="">
+            <p class="label-right">💯 Right: <span class="right1">10</span></p>
+            <p class="label-score">💯 Score: <span class="score">0</span></p>
           </div>
-          <ol class="hall-of-fame h-75"></ol>
+          <p class="label-highscore w-100 text-center">🥇 Highscore</p>
+          <div
+            class="hall-of-fame d-flex flex-column mt-3 border border-1"
+          ></div>
         </aside>
       </div>
+
+      <section
+        class="enter row bg-light flex-column align-items-center gap-3 text-center mt-3"
+      >
+        <p class="text-primary">Enter Your Name</p>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="w-25"
+          style="font-size: 32px"
+        />
+        <button class="enter-name btn btn-outline-success text-capitalize w-25">
+          Enter
+        </button>
+      </section>
     </main>
     <script src="script.js"></script>
     <script
