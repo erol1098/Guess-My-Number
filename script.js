@@ -10,31 +10,12 @@ let isStart = false;
 let isStop = false;
 let difficultyLevel = 'normal';
 let playerName = '';
-let highScoreList = [];
-if (sessionStorage.getItem('Guess My Number High Score')) {
-  let temp = sessionStorage.getItem('Guess My Number High Score');
-  highScoreList = temp.split(',*,').map(entry => entry.split(','));
-} else highScoreList = [[100, 100000]];
-
-//* Update Hall Of Fame
-const updateTable = function () {
-  document.querySelector('.hall-of-fame').innerHTML = '';
-  highScoreList;
-  const list = document.createElement('ol');
-  highScoreList
-    .filter(entry => entry[1] < 30)
-    .filter((_, i) => i < 10)
-    .forEach(score => {
-      const newScore = document.createElement('li');
-      newScore.classList.add('lead', 'mt-2');
-      newScore.textContent = `${score[0]} : ${score[1]} - ${score[2]}`;
-      list.append(newScore);
-    });
-
-  document.querySelector('.hall-of-fame').append(list);
-};
-updateTable();
-highScoreList = highScoreList.map(entry => entry.slice(1));
+let highScoreList = [[100, 100000]];
+// if (sessionStorage.getItem('Guess My Number High Score')) {
+//   let temp = sessionStorage.getItem('Guess My Number High Score');
+//   highScoreList = temp.split(',*,').map(entry => entry.split(','));
+// } else highScoreList = [[100, 100000]];
+console.log(highScoreList);
 
 document.querySelector('.number').textContent = myNumber;
 
@@ -96,6 +77,24 @@ document.querySelector('.again').addEventListener('click', e => {
   // document.querySelector('body').style.backgroundColor = '#fff';
 });
 
+//* Update Hall Of Fame
+const updateTable = function () {
+  document.querySelector('.hall-of-fame').innerHTML = '';
+  highScoreList;
+  const list = document.createElement('ol');
+  highScoreList
+    .filter(entry => entry[0] < 30)
+    .filter((_, i) => i < 10)
+    .forEach(score => {
+      const newScore = document.createElement('li');
+      newScore.classList.add('lead', 'mt-2');
+      newScore.textContent = `${playerName} : ${score[0]} - ${score[1]}`;
+      list.append(newScore);
+    });
+
+  document.querySelector('.hall-of-fame').append(list);
+};
+updateTable();
 //* Add Difficulty Level
 document.querySelector('.buttons').addEventListener('click', e => {
   if (!gameOn) {
@@ -134,7 +133,7 @@ const calculateScore = function (score) {
 const checkHighScore = function (score) {
   let flag = false;
   const time = ((isStop - isStart) / 1000).toFixed(2);
-  const highScoreEntry = [playerName, score, time, '*'];
+  const highScoreEntry = [score, time, '*'];
 
   highScoreList.forEach((entry, i) => {
     console.log('object');
