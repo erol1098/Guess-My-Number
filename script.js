@@ -73,6 +73,7 @@ document.querySelector('.again').addEventListener('click', e => {
   gameMessage('Start guessing');
   gameNumber(myNumber);
   gameRight(right);
+  gameBetween('(Between 1 and 100)');
   calculateScore(score);
   gameScore(0);
   document.querySelector('.guess').value = '';
@@ -139,7 +140,15 @@ const checkHighScore = function (score) {
   const highScoreEntry = [playerName, score, time, '*'];
 
   highScoreList.forEach((entry, i) => {
-    if (score <= entry[1] && time <= entry[2] && !flag) {
+    // if (score <= entry[1] && time <= entry[2] && !flag) {
+    //   highScoreList.splice(i, 0, highScoreEntry);
+    //   flag = true;
+    // }
+
+    if (score < entry[1] && !flag) {
+      highScoreList.splice(i, 0, highScoreEntry);
+      flag = true;
+    } else if (score == entry[1] && time <= entry[2] && !flag) {
       highScoreList.splice(i, 0, highScoreEntry);
       flag = true;
     }
