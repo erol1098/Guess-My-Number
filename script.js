@@ -20,8 +20,6 @@ sessionStorage.getItem('Guess My Number High Score')
       .map(entry => entry.split(',')))
   : (highScoreList = [['Unknown', 100, 100000]]);
 
-// document.querySelector('.number').textContent = myNumber;
-
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
 };
@@ -30,9 +28,6 @@ const gameRight = function (right) {
 };
 const gameScore = function (tempScore) {
   document.querySelector('.score').textContent = tempScore;
-};
-const gameNumber = function (number) {
-  document.querySelector('.number').textContent = number;
 };
 
 const gameBetween = function (text) {
@@ -72,7 +67,6 @@ const reset = function () {
   difficultyLevel = 'normal';
   myNumber = Math.trunc(Math.random() * 100) + 1;
   gameMessage('Start guessing');
-  gameNumber(myNumber);
   gameRight(right);
   gameBetween('(Between 1 and 100)');
   calculateScore(score);
@@ -215,7 +209,7 @@ document.querySelector('.check').addEventListener('click', e => {
         const tempScore = calculateScore(++counter);
         gameScore(tempScore);
         checkHighScore(tempScore);
-        gameNumber(myNumber);
+
         winCeramony();
         gameBetween('🎊🎊🎊Congrats🎊🎊🎊');
         isEnd = true;
@@ -232,7 +226,6 @@ document.querySelector('.check').addEventListener('click', e => {
       calculateBetween(guess);
     }
   } else {
-    gameNumber(myNumber);
     gameRight(0);
     calculateScore(0);
     gameScore(0);
