@@ -20,7 +20,7 @@ sessionStorage.getItem('Guess My Number High Score')
       .map(entry => entry.split(',')))
   : (highScoreList = [['Unknown', 100, 100000]]);
 
-document.querySelector('.number').textContent = myNumber;
+// document.querySelector('.number').textContent = myNumber;
 
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
