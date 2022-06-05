@@ -39,7 +39,7 @@
       }
     </style>
   </head>
-  <body>
+  <body style="min-width: 576px">
     <h1
       class="heading bg-light bg-gradient text-center text-primary display-3 mt-4 p-3 fw-bold"
     >
@@ -62,12 +62,12 @@
       <div class="main row mt-3 d-none">
         <p class="between text-center display-4 fw-bold">(Between 1 and 100)</p>
         <section
-          class="left col-8 p-3 d-flex flex-column justify-content-center align-items-center gap-3 bg-warning bg-gradient"
+          class="left col-12 col-lg-8 p-3 d-flex flex-column justify-content-center align-items-center gap-3 bg-warning bg-gradient"
         >
           <p
             class="message col-8 text-center bg-secondary bg-opacity-50 text-white display-4 p-3 rounded-pill"
           >
-            Start Guessing
+            Start Guessing❓
           </p>
           <input
             type="number"
@@ -75,20 +75,30 @@
             style="font-size: 90px"
             max="100"
           />
-          <button class="check btn btn-primary w-25 p-5">Check!</button>
+          <button class="check btn btn-primary w-25 py-4 py-md-5 px-md-3">
+            Check!
+          </button>
         </section>
 
         <aside
-          class="right col-4 d-flex flex-column justify-content-start align-items-start border border-2"
+          class="right col-12 col-lg-4 d-flex flex-column justify-content-start align-items-start border border-2"
         >
-          <div class="d-flex gap-5">
-            <p class="label-right">
+          <div
+            class="col-12 d-flex flex-lg-column ms-md-4 m-xl-0 flex-xxl-row justify-content-lg-between"
+          >
+            <p
+              class="label-right col-6 d-flex justify-content-start justify-content-sm-center justify-content-xl-start align-items-center gap-3"
+            >
               <i class="fa-solid fa-dice text-danger"></i> Right:
               <span class="right1">10</span>
             </p>
-            <p class="label-score">
-              <i class="fa-solid fa-star text-warning"></i> Score:
-              <span class="score">0</span>
+            <p
+              class="label-score col-6 d-flex justify-content-end justify-content-sm-center justify-content-xxl-end align-items-center gap-3"
+            >
+              <i class="fa-solid fa-star text-warning"></i> Score:<span
+                class="score"
+                >0</span
+              >
             </p>
           </div>
           <p class="label-highscore w-100 text-center">
@@ -100,7 +110,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Score</th>
-                <th scope="col">Time</th>
+                <th scope="col">Time (seconds)</th>
               </tr>
             </thead>
             <tbody></tbody>

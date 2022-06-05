@@ -1,4 +1,5 @@
 'use strict';
+//* Variables
 let right = 10;
 let score = 0;
 let highscore = 0;
@@ -12,14 +13,7 @@ let difficultyLevel = 'normal';
 let playerName = '';
 let highScoreList = [['Unknown', 100, 100000]];
 
-//* Get highscores from session storage
-sessionStorage.getItem('Guess My Number High Score')
-  ? (highScoreList = sessionStorage
-      .getItem('Guess My Number High Score')
-      .split(',*,')
-      .map(entry => entry.split(',')))
-  : (highScoreList = [['Unknown', 100, 100000]]);
-
+//* Basic Functions
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
 };
@@ -29,12 +23,19 @@ const gameRight = function (right) {
 const gameScore = function (tempScore) {
   document.querySelector('.score').textContent = tempScore;
 };
-
 const gameBetween = function (text) {
   document.querySelector('.between').textContent = text;
 };
 
-//* Entering Game
+//* Get highscores from session storage
+sessionStorage.getItem('Guess My Number High Score')
+  ? (highScoreList = sessionStorage
+      .getItem('Guess My Number High Score')
+      .split(',*,')
+      .map(entry => entry.split(',')))
+  : (highScoreList = [['Unknown', 100, 100000]]);
+
+//* Enter Game
 document.querySelector('.enter-name').addEventListener('click', e => {
   gameOn = false;
   document.querySelector('#name').value
@@ -56,6 +57,7 @@ const adjustBackground = function (color) {
   document.querySelector('.left').classList.add('bg-gradient');
 };
 
+//* Reset Defaults
 const reset = function () {
   gameOn = false;
   right = 10;
@@ -64,9 +66,11 @@ const reset = function () {
   isEnd = false;
   isStart = false;
   isStop = false;
+  start = 1;
+  end = 100;
   difficultyLevel = 'normal';
   myNumber = Math.trunc(Math.random() * 100) + 1;
-  gameMessage('Start guessing');
+  gameMessage('Start Guessing❓');
   gameRight(right);
   gameBetween('(Between 1 and 100)');
   calculateScore(score);
@@ -75,11 +79,6 @@ const reset = function () {
   adjustBackground('warning');
   document.querySelector('.start').play();
 };
-
-//* Reset
-document.querySelector('.again').addEventListener('click', e => {
-  reset();
-});
 
 //* Update Hall Of Fame
 const updateTable = function () {
@@ -98,10 +97,12 @@ const updateTable = function () {
       document.querySelector('tbody').append(newScore);
     });
 };
-updateTable();
-//* Add Difficulty Level
+
+//* Add Difficulty Level and Reset Button
 document.querySelector('.buttons').addEventListener('click', e => {
-  if (!gameOn) {
+  if (e.target.classList.contains('again')) {
+    reset();
+  } else if (!gameOn) {
     if (e.target.classList.contains('easy')) {
       right = 15;
       difficultyLevel = 'easy';
@@ -121,31 +122,35 @@ document.querySelector('.buttons').addEventListener('click', e => {
   }
 });
 
-//* Win Ceramony
-const winCeramony = function () {
-  document.querySelector('.main').classList.add('d-none');
-  document.querySelector('.buttons').classList.add('d-none');
-  document.querySelector('.video').classList.remove('d-none');
-  document.querySelector(`.win${Math.trunc(Math.random() * 3) + 1}`).play();
-  document.querySelector('.video').play();
-  document.querySelector(
-    '.heading'
-  ).innerHTML = `<i class="fa-solid fa-trophy text-warning"></i> WINNER <i class="fa-solid fa-trophy text-warning"></i>`;
+//* Between Calculator
+let start = 1;
+let end = 100;
+const calculateBetween = function (number) {
+  number >= 1 && number <= 100
+    ? number > myNumber
+      ? (end = number)
+      : (start = number)
+    : number;
+  const text = `Between ${start} and ${end}`;
+  gameBetween(text);
 };
 
-const lostCeramony = function () {
-  document.querySelector('.giphy').play();
-  document.querySelector('.game-over').play();
-  gameBetween('Try Again');
-  document.querySelector('.main').classList.add('d-none');
-  document.querySelector('.buttons').classList.add('d-none');
-  document.querySelector('.giphy').classList.remove('d-none');
-  document.querySelector(
-    '.heading'
-  ).innerHTML = `<i class="fa-solid fa-explosion text-danger"></i></i> LOSER <i class="fa-solid fa-explosion text-danger"></i></i>`;
+//* Check If Win
+const isWin = function () {
+  gameMessage('🥳 Correct Number');
+  gameRight(right - 1);
+  if (!isEnd) {
+    !isStop ? (isStop = new Date().getTime()) : isStop;
+    const tempScore = calculateScore(++counter);
+    gameScore(tempScore);
+    checkHighScore(tempScore);
+    winCeramony();
+    gameBetween('🎊🎊🎊Congrats🎊🎊🎊');
+    isEnd = true;
+  }
 };
 
-//* Score Calculate
+//* Calculate Score
 const calculateScore = function (score) {
   if (difficultyLevel === 'hard') {
     return score * 1;
@@ -155,6 +160,8 @@ const calculateScore = function (score) {
     return score * 3;
   }
 };
+
+//* Check Highscore
 const checkHighScore = function (score) {
   let flag = false;
   const time = ((isStop - isStart) / 1000).toFixed(2);
@@ -175,16 +182,28 @@ const checkHighScore = function (score) {
   updateTable();
 };
 
-//* Between Calculator
+//* Win Ceramony
+const winCeramony = function () {
+  document.querySelector('.main').classList.add('d-none');
+  document.querySelector('.buttons').classList.add('d-none');
+  document.querySelector('.video').classList.remove('d-none');
+  document.querySelector(`.win${Math.trunc(Math.random() * 3) + 1}`).play();
+  document.querySelector('.video').play();
+  document.querySelector(
+    '.heading'
+  ).innerHTML = `<i class="fa-solid fa-trophy text-warning"></i> WINNER <i class="fa-solid fa-trophy text-warning"></i>`;
+};
 
-let start = 1;
-let end = 100;
-const calculateBetween = function (number) {
-  number >= 1 && number <= 100 && number > myNumber
-    ? (end = number)
-    : (start = number);
-  const text = `Between ${start} and ${end}`;
-  gameBetween(text);
+const lostCeramony = function () {
+  document.querySelector('.giphy').play();
+  document.querySelector('.game-over').play();
+  gameBetween('🦾 Try Again...');
+  document.querySelector('.main').classList.add('d-none');
+  document.querySelector('.buttons').classList.add('d-none');
+  document.querySelector('.giphy').classList.remove('d-none');
+  document.querySelector(
+    '.heading'
+  ).innerHTML = `<i class="fa-solid fa-explosion text-danger"></i></i> LOSER <i class="fa-solid fa-explosion text-danger"></i></i>`;
 };
 
 //* Saving Session Storage
@@ -195,26 +214,15 @@ const saveHighScore = function (list) {
 
 //* Play Game Check Button
 document.querySelector('.check').addEventListener('click', e => {
+  console.log(myNumber);
   gameOn = true;
   !isStart ? (isStart = new Date().getTime()) : isStart;
   const guess = +document.querySelector('.guess').value;
   if (right > 1) {
     if (!guess) {
-      gameMessage('🛑 Only Number');
-    } else if (guess === myNumber) {
-      gameMessage('🎉 Correct Number');
-      gameRight(right - 1);
-      if (!isEnd) {
-        !isStop ? (isStop = new Date().getTime()) : isStop;
-        const tempScore = calculateScore(++counter);
-        gameScore(tempScore);
-        checkHighScore(tempScore);
-
-        winCeramony();
-        gameBetween('🎊🎊🎊Congrats🎊🎊🎊');
-        isEnd = true;
-      }
-    } else if (guess !== myNumber) {
+      gameMessage('❌ Only Number');
+    } else if (guess === myNumber) isWin();
+    else if (guess !== myNumber) {
       right--;
       gameMessage(guess > myNumber ? '👎 A Bit Lower ' : '👍 A Bit Higher ');
       guess > myNumber
@@ -226,11 +234,14 @@ document.querySelector('.check').addEventListener('click', e => {
       calculateBetween(guess);
     }
   } else {
-    gameRight(0);
-    calculateScore(0);
-    gameScore(0);
-    gameMessage('You Have Lost!');
-    lostCeramony();
+    if (guess === myNumber) isWin();
+    else {
+      gameRight(0);
+      calculateScore(0);
+      gameScore(0);
+      gameMessage('You Have Lost!');
+      lostCeramony();
+    }
   }
 });
 
@@ -248,4 +259,4 @@ document.querySelector('.videos').addEventListener('click', e => {
   }
 });
 
-const gameEnd = function () {};
+updateTable();
