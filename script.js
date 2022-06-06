@@ -72,7 +72,7 @@ const reset = function () {
   myNumber = Math.trunc(Math.random() * 100) + 1;
   gameMessage('Start Guessing❓');
   gameRight(right);
-  gameBetween('(Between 1 and 100)');
+  gameBetween('Between 1 and 100');
   calculateScore(score);
   gameScore(0);
   document.querySelector('.guess').value = '';
@@ -176,7 +176,6 @@ const checkHighScore = function (score) {
       highScoreList.splice(i, 0, highScoreEntry);
       flag = true;
     }
-    console.log(highScoreList);
   });
   saveHighScore(highScoreList.slice(0, 11));
   updateTable();
@@ -197,7 +196,7 @@ const winCeramony = function () {
 const lostCeramony = function () {
   document.querySelector('.giphy').play();
   document.querySelector('.game-over').play();
-  gameBetween('🦾 Try Again...');
+  gameBetween(`😔 The correct number was ${myNumber}`);
   document.querySelector('.main').classList.add('d-none');
   document.querySelector('.buttons').classList.add('d-none');
   document.querySelector('.giphy').classList.remove('d-none');
@@ -214,7 +213,6 @@ const saveHighScore = function (list) {
 
 //* Play Game Check Button
 document.querySelector('.check').addEventListener('click', e => {
-  console.log(myNumber);
   gameOn = true;
   !isStart ? (isStart = new Date().getTime()) : isStart;
   const guess = +document.querySelector('.guess').value;
