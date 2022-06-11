@@ -18,7 +18,6 @@ let highScoreList;
     JSON.stringify([{ player: 'Unknown', score: 100, time: 100000 }])
   );
 
-console.log(myNumber);
 //* Basic Functions
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
