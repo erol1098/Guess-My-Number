@@ -17,7 +17,6 @@ let highScoreList;
     'Guess My Number High Score',
     JSON.stringify([{ player: 'Unknown', score: 100, time: 100000 }])
   );
-
 //* Basic Functions
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
@@ -171,13 +170,16 @@ const checkHighScore = function (score) {
   const highScoreEntry = { player: playerName, score: score, time: time };
 
   highScoreList.forEach((entry, i) => {
-    if (highScoreEntry.score < entry.score) {
+    if (highScoreEntry.score < entry.score && !flag) {
       highScoreList.splice(i, 0, highScoreEntry);
+      flag = true;
     } else if (
       highScoreEntry.score == entry.score &&
-      highScoreEntry.time <= entry.time
+      highScoreEntry.time <= entry.time &&
+      !flag
     ) {
       highScoreList.splice(i, 0, highScoreEntry);
+      flag = true;
     }
   });
 
