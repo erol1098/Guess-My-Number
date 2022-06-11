@@ -11,8 +11,14 @@ let isStart = false;
 let isStop = false;
 let difficultyLevel = 'normal';
 let playerName = '';
-let highScoreList = [['Unknown', 100, 100000]];
+let highScoreList;
+!sessionStorage.getItem('Guess My Number High Score') &&
+  sessionStorage.setItem(
+    'Guess My Number High Score',
+    JSON.stringify([{ player: 'Unknown', score: 100, time: 100000 }])
+  );
 
+console.log(myNumber);
 //* Basic Functions
 const gameMessage = function (message) {
   document.querySelector('.message').textContent = message;
@@ -28,12 +34,10 @@ const gameBetween = function (text) {
 };
 
 //* Get highscores from session storage
-sessionStorage.getItem('Guess My Number High Score')
-  ? (highScoreList = sessionStorage
-      .getItem('Guess My Number High Score')
-      .split(',*,')
-      .map(entry => entry.split(',')))
-  : (highScoreList = [['Unknown', 100, 100000]]);
+
+highScoreList = JSON.parse(
+  sessionStorage.getItem('Guess My Number High Score')
+);
 
 //* Enter Game
 document.querySelector('.enter-name').addEventListener('click', e => {
@@ -85,15 +89,15 @@ const updateTable = function () {
   document.querySelector('tbody').innerHTML = '';
   let place = 0;
   highScoreList
-    .filter(entry => entry[1] < 30)
+    .filter(entry => entry.score < 30)
     .filter((_, i) => i < 10)
     .forEach(score => {
       const newScore = document.createElement('tr');
       newScore.classList.add('text-secondary');
       newScore.innerHTML = `<th scope="row">${++place}</th>
-      <td>${score[0]}</td>
-      <td>${score[1]}</td>
-      <td>${score[2]}</td>`;
+      <td>${score.player}</td>
+      <td>${score.score}</td>
+      <td>${score.time}</td>`;
       document.querySelector('tbody').append(newScore);
     });
 };
@@ -165,18 +169,19 @@ const calculateScore = function (score) {
 const checkHighScore = function (score) {
   let flag = false;
   const time = ((isStop - isStart) / 1000).toFixed(2);
-  const highScoreEntry = [playerName, score, time, '*'];
+  const highScoreEntry = { player: playerName, score: score, time: time };
 
-  highScoreList.forEach((entry, i, arr) => {
-    arr[i][3] = '*';
-    if (score < entry[1] && !flag) {
+  highScoreList.forEach((entry, i) => {
+    if (highScoreEntry.score < entry.score) {
       highScoreList.splice(i, 0, highScoreEntry);
-      flag = true;
-    } else if (score == entry[1] && time <= entry[2] && !flag) {
+    } else if (
+      highScoreEntry.score == entry.score &&
+      highScoreEntry.time <= entry.time
+    ) {
       highScoreList.splice(i, 0, highScoreEntry);
-      flag = true;
     }
   });
+
   saveHighScore(highScoreList.slice(0, 11));
   updateTable();
 };
@@ -207,8 +212,7 @@ const lostCeramony = function () {
 
 //* Saving Session Storage
 const saveHighScore = function (list) {
-  sessionStorage.removeItem('Guess My Number High Score');
-  sessionStorage.setItem('Guess My Number High Score', list);
+  sessionStorage.setItem('Guess My Number High Score', JSON.stringify(list));
 };
 
 //* Play Game Check Button
